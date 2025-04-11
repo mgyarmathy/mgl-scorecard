@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Team } from "../types";
 import {
   calculateStrokesReceived,
@@ -27,6 +27,19 @@ const GolfScorecard: React.FC<ScorecardProps> = ({
           .map(() => Array(9).fill(null)),
       ),
   );
+
+  // Load initial scores from localStorage
+  useEffect(() => {
+    const storedScores = localStorage.getItem("scores");
+    if (storedScores) {
+      setScores(JSON.parse(storedScores));
+    }
+  }, []);
+
+  // Save scores to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("scores", JSON.stringify(scores));
+  }, [scores]);
 
   const handleScoreChange = (
     teamIndex: number,

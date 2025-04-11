@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import GolfScorecard from "../components/Scorecard";
 import courses from "../lib/courses";
 import { Team } from "@/types";
@@ -26,6 +26,27 @@ export default function Home() {
   const [selectedCourse, setSelectedCourse] = useState(courses[0]);
   const holeHandicaps = selectedCourse.holes.map((hole) => hole.handicap);
   const holePars = selectedCourse.holes.map((hole) => hole.par);
+
+  // Load initial state from localStorage
+  useEffect(() => {
+    const storedTeams = localStorage.getItem("teams");
+    const storedCourse = localStorage.getItem("selectedCourse");
+    if (storedTeams) {
+      setTeams(JSON.parse(storedTeams));
+    }
+    if (storedCourse) {
+      setSelectedCourse(JSON.parse(storedCourse));
+    }
+  }, []);
+
+  // Save state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("teams", JSON.stringify(teams));
+  }, [teams]);
+
+  useEffect(() => {
+    localStorage.setItem("selectedCourse", JSON.stringify(selectedCourse));
+  }, [selectedCourse]);
 
   const handleCourseChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCourse(courses.find((c) => c.name === event.target.value)!);
