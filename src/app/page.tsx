@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import GolfScorecard from "../components/Scorecard";
 import courses from "../lib/courses";

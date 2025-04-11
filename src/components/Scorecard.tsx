@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { Team } from "../types";
 import {
@@ -65,7 +67,7 @@ const GolfScorecard: React.FC<ScorecardProps> = ({
   );
   return (
     <div className="container mx-auto p-4">
-      <div className="flex flex-col justify-center items-center mb-4 p-6 rounded-lg">
+      <div className="flex flex-col justify-center items-center mb-8 p-6 rounded-lg">
         <div className="flex mb-2">
           <div className="text-6xl font-bold tracking-wider flex items-center gap-8">
             <div className="flex flex-col items-center">
