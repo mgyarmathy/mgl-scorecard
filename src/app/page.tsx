@@ -135,6 +135,25 @@ export default function Home() {
             </div>
           ))}
         </div>
+
+        <div className="mt-12 pb-8 text-center text-sm text-gray-600">
+          <h2 className="text-xl font-bold mb-4">Add to Home Screen</h2>
+          <div className="space-y-2">
+            <p>
+              <strong>iOS (Safari/Chrome):</strong>
+            </p>
+            <p>1. Tap the Share button (rectangle with arrow)</p>
+            <p>2. Scroll down and tap &ldquo;Add to Home Screen&rdquo;</p>
+            <p>3. Tap &ldquo;Add&rdquo; to confirm</p>
+
+            <p className="mt-4">
+              <strong>Android (Chrome):</strong>
+            </p>
+            <p>1. Tap the menu (three dots)</p>
+            <p>2. Tap &ldquo;Add to Home screen&rdquo;</p>
+            <p>3. Tap &ldquo;Add&rdquo; to confirm</p>
+          </div>
+        </div>
       </main>
     </div>
   );

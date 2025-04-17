@@ -29,6 +29,20 @@ const courses: Course[] = [
       { number: 9, par: 4, handicap: 7 },
     ],
   },
+  {
+    name: "Pecan Hollow",
+    holes: [
+      { number: 1, par: 4, handicap: 11 },
+      { number: 2, par: 4, handicap: 5 },
+      { number: 3, par: 5, handicap: 1 },
+      { number: 4, par: 4, handicap: 9 },
+      { number: 5, par: 3, handicap: 15 },
+      { number: 6, par: 4, handicap: 3 },
+      { number: 7, par: 4, handicap: 13 },
+      { number: 8, par: 3, handicap: 17 },
+      { number: 9, par: 5, handicap: 7 },
+    ],
+  },
 ];
 
 export default courses;
