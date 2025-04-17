@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Team } from "../types";
 import {
-  calculateStrokesReceived,
+  calculateAllStrokesReceived,
   calculateHoleResults,
 } from "@/lib/scorekeeping";
 
@@ -67,6 +67,11 @@ const GolfScorecard: React.FC<ScorecardProps> = ({
   };
 
   const holeResults = calculateHoleResults(teams, scores, holeHandicaps);
+  // Compute capped strokes received per player per hole
+  const strokesReceivedMatrix = calculateAllStrokesReceived(
+    teams,
+    holeHandicaps,
+  );
   const matchScore = holeResults.reduce(
     (acc, result) => {
       if (result != null && result !== "TIE") {
@@ -149,10 +154,8 @@ const GolfScorecard: React.FC<ScorecardProps> = ({
         <tbody>
           {teams.map((team, teamIndex) =>
             team.players.map((player, playerIndex) => {
-              const strokesReceived = calculateStrokesReceived(
-                player.handicap,
-                holeHandicaps,
-              );
+              const strokesReceived =
+                strokesReceivedMatrix[teamIndex][playerIndex];
               const rowClass = playerIndex === 0 ? "bg-gray-50" : "";
               return (
                 <tr
