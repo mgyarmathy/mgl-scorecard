@@ -149,6 +149,21 @@ const GolfScorecard: React.FC<ScorecardProps> = ({
                 </table>
               </th>
             ))}
+            <th key="total" className="py-2 px-4 border-b">
+              <table className="min-w-full">
+                <tbody>
+                  <tr>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td>TOTAL</td>
+                  </tr>
+                </tbody>
+              </table>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -172,7 +187,7 @@ const GolfScorecard: React.FC<ScorecardProps> = ({
                   </td>
                   {scores[teamIndex][playerIndex].map((score, holeIndex) => (
                     <td key={holeIndex} className="border">
-                      <div className="flex items-top gap-1">
+                      <div className="flex flex-col">
                         <select
                           value={score === null ? 0 : score}
                           onChange={(e) =>
@@ -185,7 +200,7 @@ const GolfScorecard: React.FC<ScorecardProps> = ({
                                 : parseInt(e.target.value),
                             )
                           }
-                          className="w-20 px-2 py-2 rounded-md focus:outline-none appearance-none"
+                          className="w-20 h-10 pt-1 text-center text-xl focus:outline-none appearance-none"
                         >
                           {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => (
                             <option key={value} value={value}>
@@ -193,14 +208,23 @@ const GolfScorecard: React.FC<ScorecardProps> = ({
                             </option>
                           ))}
                         </select>
-                        {strokesReceived[holeIndex] > 0 && (
-                          <span>
-                            <sup>-{strokesReceived[holeIndex]}</sup>
-                          </span>
-                        )}
+                        <div className="text-[8px] text-center h-3">
+                          {Array(strokesReceived[holeIndex])
+                            .fill("●")
+                            .join(" ")}
+                        </div>
                       </div>
                     </td>
                   ))}
+                  <td
+                    key="total"
+                    className="border w-20 h-10 text-lg text-center"
+                  >
+                    {scores[teamIndex][playerIndex].reduce(
+                      (acc, score) => acc! + (score ?? 0),
+                      0,
+                    )}
+                  </td>
                 </tr>
               );
             }),
@@ -212,7 +236,9 @@ const GolfScorecard: React.FC<ScorecardProps> = ({
             <td />
             <td />
             {holeResults.map((result, i) => (
-              <td key={i}>{result != null ? result : "-"}</td>
+              <td key={i} className="w-20 h-10 text-lg text-gray-300">
+                {result != null ? result : "-"}
+              </td>
             ))}
           </tr>
         </tfoot>
