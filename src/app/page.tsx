@@ -69,8 +69,8 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen p-8 pb-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="max-w-4xl mx-auto">
+    <div className="min-h-screen p-4 pb-20 font-[family-name:var(--font-geist-sans)]">
+      <main className="mx-auto">
         <h1 className="text-3xl font-bold text-center mb-2">MGL</h1>
 
         <GolfScorecard

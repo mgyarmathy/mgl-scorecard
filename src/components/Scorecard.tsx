@@ -102,7 +102,7 @@ const GolfScorecard: React.FC<ScorecardProps> = ({
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto mb-4">
       <div className="flex flex-col justify-center items-center mb-2">
         <div className="text-6xl font-bold flex items-center gap-8">
           <span
@@ -121,142 +121,151 @@ const GolfScorecard: React.FC<ScorecardProps> = ({
           New Scorecard
         </button>
       </div>
-      <table className="min-w-full bg-white border rounded-lg">
-        <thead className="bg-gray-100">
-          <tr className="text-left text-gray-700">
-            <th className="py-2 px-4 border-b"></th>
-            <th className="py-2 px-4 border-b">Player (Handicap)</th>
-            <th className="py-2 px-4 border-b">
-              <table>
-                <tbody>
-                  <tr>
-                    <td>HOLE</td>
-                  </tr>
-                  <tr>
-                    <td>PAR</td>
-                  </tr>
-                  <tr>
-                    <td>HDCP</td>
-                  </tr>
-                </tbody>
-              </table>
-            </th>
-            {holeHandicaps.map((_, i) => (
-              <th key={i} className="py-2 px-4 border-b text-center">
-                <table className="min-w-full">
+      <div className="overflow-y-scroll">
+        <table className="min-w-full bg-white border rounded-lg">
+          <thead className="bg-gray-100">
+            <tr className="text-left text-gray-700">
+              <th className="py-2 px-4 border-b"></th>
+              <th className="py-2 px-4 border-b">Player (Handicap)</th>
+              <th className="py-2 px-4 border-b">
+                <table>
                   <tbody>
                     <tr>
-                      <td>{i + 1}</td>
+                      <td>HOLE</td>
                     </tr>
                     <tr>
-                      <td>{holePars[i]}</td>
+                      <td>PAR</td>
                     </tr>
                     <tr>
-                      <td>{holeHandicaps[i]}</td>
+                      <td>HDCP</td>
                     </tr>
                   </tbody>
                 </table>
               </th>
-            ))}
-            <th key="total" className="py-2 px-4 border-b">
-              <table className="min-w-full">
-                <tbody>
-                  <tr>
-                    <td>&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td>&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td>TOTAL</td>
-                  </tr>
-                </tbody>
-              </table>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {teams.map((team, teamIndex) =>
-            team.players.map((player, playerIndex) => {
-              const strokesReceived =
-                strokesReceivedMatrix[teamIndex][playerIndex];
-              return (
-                <tr key={`${teamIndex}-${playerIndex}`}>
-                  {playerIndex === 0 && (
-                    <td
-                      rowSpan={2}
-                      className={`py-2 px-4 border-b`}
-                      style={{ backgroundColor: team.name }}
-                    >
-                      &nbsp;
-                    </td>
-                  )}
-                  <td className="py-2 px-4 border-b" colSpan={2}>
-                    {player.name}
-                    <br />({player.handicap})
-                  </td>
-                  {scores[teamIndex][playerIndex].map((score, holeIndex) => (
-                    <td key={holeIndex} className="border">
-                      <div className="flex flex-col">
-                        <select
-                          value={score === null ? 0 : score}
-                          onChange={(e) =>
-                            handleScoreChange(
-                              teamIndex,
-                              playerIndex,
-                              holeIndex,
-                              e.target.value === "0"
-                                ? null
-                                : parseInt(e.target.value),
-                            )
-                          }
-                          className="w-20 h-10 pt-1 text-center text-xl focus:outline-none appearance-none cursor-pointer"
-                        >
-                          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => (
-                            <option key={value} value={value}>
-                              {value === 0 ? "" : value}
-                            </option>
-                          ))}
-                        </select>
-                        <div className="text-[8px] text-center h-3">
-                          {Array(strokesReceived[holeIndex])
-                            .fill("●")
-                            .join(" ")}
-                        </div>
-                      </div>
-                    </td>
-                  ))}
-                  <td
-                    key="total"
-                    className="border w-20 h-10 text-lg text-center"
-                  >
-                    {scores[teamIndex][playerIndex].reduce(
-                      (acc, score) => acc! + (score ?? 0),
-                      0,
+              {holeHandicaps.map((_, i) => (
+                <th key={i} className="py-2 px-4 border-b text-center">
+                  <table className="min-w-full">
+                    <tbody>
+                      <tr>
+                        <td>{i + 1}</td>
+                      </tr>
+                      <tr>
+                        <td>{holePars[i]}</td>
+                      </tr>
+                      <tr>
+                        <td>{holeHandicaps[i]}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </th>
+              ))}
+              <th key="total" className="py-2 px-4 border-b">
+                <table className="min-w-full">
+                  <tbody>
+                    <tr>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td>TOTAL</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {teams.map((team, teamIndex) =>
+              team.players.map((player, playerIndex) => {
+                const strokesReceived =
+                  strokesReceivedMatrix[teamIndex][playerIndex];
+                return (
+                  <tr key={`${teamIndex}-${playerIndex}`}>
+                    {playerIndex === 0 && (
+                      <td
+                        rowSpan={2}
+                        className={`py-2 px-4 border-b`}
+                        style={{ backgroundColor: team.name }}
+                      >
+                        &nbsp;
+                      </td>
                     )}
-                  </td>
-                </tr>
-              );
-            }),
-          )}
-        </tbody>
-        <tfoot className="text-center">
-          <tr>
-            <td />
-            <td />
-            <td />
-            {holeResults.map((result, i) => (
-              <td
-                key={i}
-                className="w-20 h-10 text-lg"
-                style={{ backgroundColor: result as never }}
-              >
-                {result != null ? "" : "-"}
-              </td>
-            ))}
-          </tr>
-        </tfoot>
-      </table>
+                    <td className="py-2 px-4 border-b" colSpan={2}>
+                      {player.name}
+                      <br />({player.handicap})
+                    </td>
+                    {scores[teamIndex][playerIndex].map((score, holeIndex) => (
+                      <td key={holeIndex} className="border">
+                        <div className="flex flex-col">
+                          <select
+                            value={score === null ? 0 : score}
+                            onChange={(e) =>
+                              handleScoreChange(
+                                teamIndex,
+                                playerIndex,
+                                holeIndex,
+                                e.target.value === "0"
+                                  ? null
+                                  : parseInt(e.target.value),
+                              )
+                            }
+                            className="w-20 h-10 pt-1 text-center text-xl focus:outline-none appearance-none cursor-pointer"
+                          >
+                            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => (
+                              <option key={value} value={value}>
+                                {value === 0 ? "" : value}
+                              </option>
+                            ))}
+                          </select>
+                          <div className="text-[8px] text-center h-3">
+                            {Array(strokesReceived[holeIndex])
+                              .fill("●")
+                              .join(" ")}
+                          </div>
+                        </div>
+                      </td>
+                    ))}
+                    <td
+                      key="total"
+                      className="border w-20 h-10 text-lg text-center"
+                    >
+                      {scores[teamIndex][playerIndex].reduce(
+                        (acc, score) => acc! + (score ?? 0),
+                        0,
+                      )}
+                    </td>
+                  </tr>
+                );
+              }),
+            )}
+          </tbody>
+          <tfoot className="text-center">
+            <tr>
+              <td />
+              <td />
+              <td />
+              {holeResults.map((result, i) => (
+                <td
+                  key={i}
+                  className="w-20 h-10 text-lg"
+                  style={{
+                    backgroundColor:
+                      result != null
+                        ? result != "TIE"
+                          ? result
+                          : "white"
+                        : ("white" as never),
+                  }}
+                >
+                  {result != null ? (result === "TIE" ? result : "") : "-"}
+                </td>
+              ))}
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
   );
 };
