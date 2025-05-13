@@ -6,6 +6,7 @@ import {
   calculateAllStrokesReceived,
   calculateHoleResults,
 } from "@/lib/scorekeeping";
+import { keys } from "@/lib/cache";
 
 interface ScorecardProps {
   teams: Team[];
@@ -30,7 +31,7 @@ const GolfScorecard: React.FC<ScorecardProps> = ({
 
   // Load initial scores from localStorage
   useEffect(() => {
-    const storedScores = localStorage.getItem("scores");
+    const storedScores = localStorage.getItem(keys.SCORES);
     if (storedScores) {
       setScores(JSON.parse(storedScores));
     }
@@ -38,7 +39,7 @@ const GolfScorecard: React.FC<ScorecardProps> = ({
 
   // Save scores to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem("scores", JSON.stringify(scores));
+    localStorage.setItem(keys.SCORES, JSON.stringify(scores));
   }, [scores]);
 
   const handleScoreChange = (
@@ -90,39 +91,37 @@ const GolfScorecard: React.FC<ScorecardProps> = ({
   const upBy = Math.abs(team1Up - team2Up);
 
   if (team1Up > team2Up) {
-    matchStatus = `${upBy} up`;
+    matchStatus = `${upBy} UP`;
     leadingTeam = teams[0].name;
   } else if (team2Up > team1Up) {
-    matchStatus = `${upBy} up`;
+    matchStatus = `${upBy} UP`;
     leadingTeam = teams[1].name;
   } else {
-    matchStatus = "all square";
-    leadingTeam = null;
+    matchStatus = "ALL SQUARE";
+    leadingTeam = "#333";
   }
 
   return (
     <div className="container mx-auto p-4">
       <div className="flex flex-col justify-center items-center mb-2">
         <div className="text-6xl font-bold flex items-center gap-8">
-          {leadingTeam != null && (
-            <span className="bg-gray-100 px-6 py-3 rounded-lg">
-              {leadingTeam} {matchStatus}
-            </span>
-          )}
-          {leadingTeam === null && (
-            <span className="bg-gray-100 px-6 py-3 rounded-lg">all square</span>
-          )}
+          <span
+            className="px-6 py-3 rounded-lg text-white"
+            style={{ backgroundColor: leadingTeam as never }}
+          >
+            {matchStatus}
+          </span>
         </div>
       </div>
       <div className="mb-2">
         <button
           onClick={handleNewScorecard}
-          className="border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100"
+          className="border rounded-md px-4 py-2 hover:bg-gray-100"
         >
           New Scorecard
         </button>
       </div>
-      <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+      <table className="min-w-full bg-white border rounded-lg">
         <thead className="bg-gray-100">
           <tr className="text-left text-gray-700">
             <th className="py-2 px-4 border-b"></th>
@@ -181,19 +180,20 @@ const GolfScorecard: React.FC<ScorecardProps> = ({
             team.players.map((player, playerIndex) => {
               const strokesReceived =
                 strokesReceivedMatrix[teamIndex][playerIndex];
-              const rowClass = playerIndex === 0 ? "bg-gray-50" : "";
               return (
-                <tr
-                  key={`${teamIndex}-${playerIndex}`}
-                  className={`${rowClass} hover:bg-gray-100`}
-                >
+                <tr key={`${teamIndex}-${playerIndex}`}>
                   {playerIndex === 0 && (
-                    <td rowSpan={2} className="py-2 px-4 border-b">
-                      {team.name}
+                    <td
+                      rowSpan={2}
+                      className={`py-2 px-4 border-b`}
+                      style={{ backgroundColor: team.name }}
+                    >
+                      &nbsp;
                     </td>
                   )}
                   <td className="py-2 px-4 border-b" colSpan={2}>
-                    {player.name} ({player.handicap})
+                    {player.name}
+                    <br />({player.handicap})
                   </td>
                   {scores[teamIndex][playerIndex].map((score, holeIndex) => (
                     <td key={holeIndex} className="border">
@@ -210,7 +210,7 @@ const GolfScorecard: React.FC<ScorecardProps> = ({
                                 : parseInt(e.target.value),
                             )
                           }
-                          className="w-20 h-10 pt-1 text-center text-xl focus:outline-none appearance-none"
+                          className="w-20 h-10 pt-1 text-center text-xl focus:outline-none appearance-none cursor-pointer"
                         >
                           {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => (
                             <option key={value} value={value}>
@@ -246,8 +246,12 @@ const GolfScorecard: React.FC<ScorecardProps> = ({
             <td />
             <td />
             {holeResults.map((result, i) => (
-              <td key={i} className="w-20 h-10 text-lg text-gray-300">
-                {result != null ? result : "-"}
+              <td
+                key={i}
+                className="w-20 h-10 text-lg"
+                style={{ backgroundColor: result as never }}
+              >
+                {result != null ? "" : "-"}
               </td>
             ))}
           </tr>

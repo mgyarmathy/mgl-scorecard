@@ -3,19 +3,20 @@
 import React, { useState, useEffect } from "react";
 import GolfScorecard from "../components/Scorecard";
 import courses from "../lib/courses";
+import { keys } from "../lib/cache";
 import { Team } from "@/types";
 
 export default function Home() {
   const [teams, setTeams] = useState<Team[]>([
     {
-      name: "🟥",
+      name: "#d9534f", // red
       players: [
         { name: "Player 1", handicap: 0 },
         { name: "Player 2", handicap: 0 },
       ],
     },
     {
-      name: "🟦",
+      name: "#3b5998", // blue
       players: [
         { name: "Player 3", handicap: 0 },
         { name: "Player 4", handicap: 0 },
@@ -29,8 +30,8 @@ export default function Home() {
 
   // Load initial state from localStorage
   useEffect(() => {
-    const storedTeams = localStorage.getItem("teams");
-    const storedCourse = localStorage.getItem("selectedCourse");
+    const storedTeams = localStorage.getItem(keys.TEAMS);
+    const storedCourse = localStorage.getItem(keys.SELECTED_COURSE);
     if (storedTeams) {
       setTeams(JSON.parse(storedTeams));
     }
@@ -41,11 +42,11 @@ export default function Home() {
 
   // Save state to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem("teams", JSON.stringify(teams));
+    localStorage.setItem(keys.TEAMS, JSON.stringify(teams));
   }, [teams]);
 
   useEffect(() => {
-    localStorage.setItem("selectedCourse", JSON.stringify(selectedCourse));
+    localStorage.setItem(keys.SELECTED_COURSE, JSON.stringify(selectedCourse));
   }, [selectedCourse]);
 
   const handleCourseChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -95,7 +96,10 @@ export default function Home() {
           </div>
           {teams.map((team, teamIndex) => (
             <div key={team.name} className="mb-4">
-              <h2 className="text-xl font-bold mb-2">{team.name} Team</h2>
+              <div
+                className={`mb-2 h-8 w-72`}
+                style={{ backgroundColor: team.name }}
+              />
               {team.players.map((player, playerIndex) => (
                 <div key={playerIndex} className="flex gap-4 mb-2">
                   <input
