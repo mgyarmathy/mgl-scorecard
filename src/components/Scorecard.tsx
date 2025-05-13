@@ -72,36 +72,46 @@ const GolfScorecard: React.FC<ScorecardProps> = ({
     teams,
     holeHandicaps,
   );
-  const matchScore = holeResults.reduce(
-    (acc, result) => {
-      if (result != null && result !== "TIE") {
-        acc[result] += 1;
-      } else if (result == "TIE") {
-        Object.keys(acc).forEach((key) => (acc[key] += 0.5));
-      }
-      return acc;
-    },
-    { [teams[0].name]: 0, [teams[1].name]: 0 },
-  );
+  // Calculate match play status
+  let team1Up = 0;
+  let team2Up = 0;
+
+  for (const result of holeResults) {
+    if (result === teams[0].name) {
+      team1Up++;
+    } else if (result === teams[1].name) {
+      team2Up++;
+    }
+    // Ties do not affect the up/down count
+  }
+
+  let matchStatus: string | null = null;
+  let leadingTeam: string | null = null;
+  const upBy = Math.abs(team1Up - team2Up);
+
+  if (team1Up > team2Up) {
+    matchStatus = `${upBy} up`;
+    leadingTeam = teams[0].name;
+  } else if (team2Up > team1Up) {
+    matchStatus = `${upBy} up`;
+    leadingTeam = teams[1].name;
+  } else {
+    matchStatus = "all square";
+    leadingTeam = null;
+  }
+
   return (
     <div className="container mx-auto p-4">
-      <div className="flex flex-col justify-center items-center mb-8 p-6 rounded-lg">
-        <div className="flex mb-2">
-          <div className="text-6xl font-bold tracking-wider flex items-center gap-8">
-            <div className="flex flex-col items-center">
-              <span className="mb-2">{teams[0].name}</span>
-              <span className="bg-gray-100 px-6 py-3 rounded-lg">
-                {matchScore[teams[0].name]}
-              </span>
-            </div>
-            <div className="text-4xl">VS</div>
-            <div className="flex flex-col items-center">
-              <span className="mb-2">{teams[1].name}</span>
-              <span className="bg-gray-100 px-6 py-3 rounded-lg">
-                {matchScore[teams[1].name]}
-              </span>
-            </div>
-          </div>
+      <div className="flex flex-col justify-center items-center mb-2">
+        <div className="text-6xl font-bold flex items-center gap-8">
+          {leadingTeam != null && (
+            <span className="bg-gray-100 px-6 py-3 rounded-lg">
+              {leadingTeam} {matchStatus}
+            </span>
+          )}
+          {leadingTeam === null && (
+            <span className="bg-gray-100 px-6 py-3 rounded-lg">all square</span>
+          )}
         </div>
       </div>
       <div className="mb-2">
