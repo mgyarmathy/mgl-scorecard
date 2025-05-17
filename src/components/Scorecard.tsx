@@ -211,7 +211,7 @@ const GolfScorecard: React.FC<ScorecardProps> = ({
                                   : parseInt(e.target.value),
                               )
                             }
-                            className="w-20 h-10 pt-1 text-center text-xl focus:outline-none appearance-none cursor-pointer"
+                            className="w-20 h-10 px-[35px] text-xl focus:outline-none appearance-none cursor-pointer"
                           >
                             {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => (
                               <option key={value} value={value}>
